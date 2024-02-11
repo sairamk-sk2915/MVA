@@ -120,3 +120,48 @@ your website per session (continuous).
 type of the visited page (e.g., Article, Category, About Us, Contact Us,
 Home Page(/)).
 <p>
+
+``` r
+library(readxl)
+```
+
+    ## Warning: package 'readxl' was built under R version 4.3.2
+
+``` r
+News_Website_Dataset <- read_excel("News Website Dataset.xlsx")
+#View(News_Website_Dataset)
+
+correlation_coefficient <- cor(News_Website_Dataset$Total_revenue, News_Website_Dataset$Avg_Session_Duration)
+
+plot(News_Website_Dataset$Avg_Session_Duration, News_Website_Dataset$Total_revenue,
+     xlab = "Average Session Duration", ylab = "Total Revenue",
+     main = "Scatter Plot of Total Revenue vs. Avg Session Duration")
+
+abline(lm(News_Website_Dataset$Total_revenue ~ News_Website_Dataset$Avg_Session_Duration), col = "red")
+```
+
+![](Project1_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+print(paste("Correlation Coefficient between Total Revenue and Avg Session Duration:", correlation_coefficient))
+```
+
+    ## [1] "Correlation Coefficient between Total Revenue and Avg Session Duration: 0.536707214155583"
+
+``` r
+# correlation  and coefficient B/W Total_revenue and Total Sessions
+correlation_coefficient2 <- cor(News_Website_Dataset$Total_revenue, News_Website_Dataset$Total_Sessions)
+print(correlation_coefficient2)
+```
+
+    ## [1] 1
+
+``` r
+plot(News_Website_Dataset$Total_Sessions, News_Website_Dataset$Total_revenue,
+     xlab = "Total Sessions", ylab = "Total Revenue",
+     main = "Scatter Plot of Total Revenue vs. Total Sessions")
+
+abline(lm(News_Website_Dataset$Total_revenue ~ News_Website_Dataset$Total_Sessions), col = "blue")
+```
+
+![](Project1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
