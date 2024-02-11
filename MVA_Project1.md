@@ -83,7 +83,7 @@ The variables included in this dataset
     - Content Category  
 
 [View the CSV
-file](https://github.com/sairamk-sk2915/MVA/blob/a6a9301d4e73b8f3cb042217dc60920a9dabbde9/News_Website_Dataset.csv)
+file](https://github.com/sairamk-sk2915/MVA/blob/62df9652b47cd0c1cf9e9fd5d058c2e834ad2581/News_Website_Dataset.csv)
 
 ## Data Dictionary
 
