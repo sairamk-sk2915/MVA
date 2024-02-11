@@ -3,32 +3,120 @@ Project1
 Satya Shiva Sai Ram Kamma
 2024-02-11
 
-## R Markdown
+## News Website Traffic and Revenue Analysing Dataset
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+I’m creating the dataset for the News website, which mostly depends on
+website traffic and repeated visitors to earn revenue.
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+From this Dataset, what I’m trying to find
 
-``` r
-z <- c(6,5,2,7,3)
-z
-```
+<b>Which time of day across different traffic sources drives the highest
+number of sessions and conversions?</b>
 
-    ## [1] 6 5 2 7 3
+<p>
 
-``` r
-is.vector(z)
-```
+1.  Identifying when each traffic source reaches its peak traffic allows
+    us to optimize your website and its resources, such as content
+    scheduling, ad campaign scheduling, and improving the responsiveness
+    and loading speed of the website.
 
-    ## [1] TRUE
+2.  Understanding how the time of day, the source of traffic, and
+    website performance relate to one another allows us to make
+    decisions based on data that improve user experience, maximize
+    resource allocation
 
-## Including Plots
+    </p>
 
-You can also embed plots, for example:
+<b>Is there a significant correlation between content category and
+session duration?</b>
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+<p>
+
+1.  We can learn what type of content is the most valuable and engaging
+    to the audience by studying how long users spend on various content
+    categories.
+
+2.  This information can direct the work we do in creating content,
+    ensuring that we focus on topics that interest users and hold their
+    attention for a longer period of time.
+
+3.  Identifying parts on a website where users quickly lose interest and
+    quit can be improved by studying the relationship between content
+    categories and session time. This enables to enhance the user
+    experience, layout, or quality of the content in specific
+    categories.
+
+    </p>
+
+<b>Are there any specific landing pages that are particularly successful
+for different traffic sources or campaigns?</b>
+
+## Find and collect data
+
+The variables included in this dataset
+
+    - Time of Day
+    - Traffic Source
+    - Landing Page
+    - Campaign  
+    - Device Category   
+    - Avg Session Duration
+    - Content Category  
+    - Total Sessions    
+    - Conversion Rate   
+    - Total revenue
+
+#### Dependent Variables
+
+    - Total Sessions    
+    - Conversion Rate   
+    - Total revenue
+
+#### Independent Variables
+
+    - Time of Day
+    - Traffic Source
+    - Landing Page
+    - Campaign  
+    - Device Category   
+    - Avg Session Duration
+    - Content Category  
+
+[View the CSV
+file](https://github.com/sairamk-sk2915/MVA/blob/a6a9301d4e73b8f3cb042217dc60920a9dabbde9/News_Website_Dataset.csv)
+
+## Data Dictionary
+
+<p>
+
+<b>Total Sessions:</b> Total number of unique sessions on the website
+for a specific timeframe (e.g., Day, Week, Month).
+
+<b>Conversion Rate:</b> Percentage of visitors who complete a desired
+action (e.g., Polls, Newslwtter subscription).
+
+<b>Total Revenue:</b> The total amount generated throughout the
+sessions.
+
+<b>Time of Day:</b> Categorical variable with 4 levels (Morning,
+Afternoon, Evening, Night).
+
+<b>Traffic Source:</b> Categorical variable indicating where visitors
+originated from (e.g., Organic Search, Search, Referral, Direct,
+Social).
+
+<b>Landing Page:</b> The first page a visitor viewed on your website.
+
+<b>Campaign:</b> Categorical variable indicating which marketing
+campaign a visitor originated from.
+
+<b>Device Category:</b> Categorical variable indicating the device used
+to access the website (e.g., Desktop, Mobile, Tablet).
+
+<b>Average Session Duration:</b> The average time spent by visitors on
+your website per session (continuous).
+
+<b>Content Category:</b> Categorical variable classifying the content
+type of the visited page (e.g., Article, Category, About Us, Contact Us,
+Home Page(/)).
+<p>
