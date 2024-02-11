@@ -82,8 +82,7 @@ The variables included in this dataset
     - Avg Session Duration
     - Content Category  
 
-[View the CSV
-file](https://github.com/sairamk-sk2915/MVA/blob/62df9652b47cd0c1cf9e9fd5d058c2e834ad2581/News_Website_Dataset.csv)
+[View the CSV file](News_Website_Dataset.csv)
 
 ## Data Dictionary
 
@@ -93,7 +92,7 @@ file](https://github.com/sairamk-sk2915/MVA/blob/62df9652b47cd0c1cf9e9fd5d058c2e
 for a specific timeframe (e.g., Day, Week, Month).
 
 <b>Conversion Rate:</b> Percentage of visitors who complete a desired
-action (e.g., Polls, Newslwtter subscription).
+action (e.g., Polls, Newsletter subscription).
 
 <b>Total Revenue:</b> The total amount generated throughout the
 sessions.
