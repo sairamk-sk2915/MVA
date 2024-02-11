@@ -1,0 +1,31 @@
+Time_of_Day,Traffic_Source,Landing_Page,Campaign,Device_Category,Avg_Session_Duration,Content_Category,Total_Sessions,Conversion_Rate,Total_revenue
+Morning,Organic Search,/blog/new-product,SEO Campaign,Desktop,3.12 ,Blog,500,2%,250.00
+Morning,Paid Search,/article-page,Paid,Mobile,1.20 ,Product,200,5%,100.00
+Morning,Referral,/catgory-page,Social Media,Tablet,2.58 ,Blog,100,3%,50.00
+Morning,Direct,/,-,Desktop,4.00 ,Homepage,300,1%,150.00
+Morning,Organic Social,Mobile,-,Mobile,1.00 ,About Us,150,0.50%,75.00
+Afternoon,Organic Search,/blog/new-product,SEO Campaign,Desktop,3.12 ,Blog,500,2%,250.00
+Afternoon,Paid Search,/article-page,Paid,Mobile,1.20 ,Product,200,5%,100.00
+Afternoon,Referral,/catgory-page,Social Media,Tablet,2.58 ,Blog,100,3%,50.00
+Afternoon,Direct,/,-,Desktop,4.00 ,Homepage,300,1%,150.00
+Afternoon,Organic Social,Mobile,-,Mobile,1.00 ,About Us,150,0.50%,75.00
+Evening,Organic Search,/blog/new-product,SEO Campaign,Desktop,3.12 ,Blog,500,2%,250.00
+Evening,Paid Search,/article-page,Paid,Mobile,1.20 ,Product,200,5%,100.00
+Evening,Referral,/catgory-page,Social Media,Tablet,2.58 ,Blog,100,3%,50.00
+Evening,Direct,/,-,Desktop,4.00 ,Homepage,300,1%,150.00
+Evening,Organic Social,Mobile,-,Mobile,1.00 ,About Us,150,0.50%,75.00
+Night,Organic Search,/blog/new-product,SEO Campaign,Desktop,3.12 ,Blog,500,2%,250.00
+Night,Paid Search,/article-page,Paid,Mobile,1.20 ,Product,200,5%,100.00
+Night,Referral,/catgory-page,Social Media,Tablet,2.58 ,Blog,100,3%,50.00
+Night,Direct,/,-,Desktop,4.00 ,Homepage,300,1%,150.00
+Night,Organic Social,Mobile,-,Mobile,1.00 ,About Us,150,0.50%,75.00
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
