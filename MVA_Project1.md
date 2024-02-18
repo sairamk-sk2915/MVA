@@ -164,3 +164,110 @@ abline(lm(News_Website_Dataset$Total_revenue ~ News_Website_Dataset$Total_Sessio
 ```
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+## Assignment 2
+
+<b>1. Univariate Analysis:</b>
+<p>
+<b>Question :</b> What is the distribution of total revenue?
+</p>
+<p>
+<b>Visualization:</b> Histogram of Total Revenue
+</p>
+
+``` r
+library(ggplot2)
+hist(News_Website_Dataset$Total_revenue, 
+     main = "Distribution of Total Revenue",
+     xlab = "Total Revenue",
+     ylab = "Frequency",
+     col = "skyblue",
+     border = "black")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+<p>
+The histogram shows the distribution of total income. It means that most
+of the income falls in the lower ranges, and is distributed to the
+right. Small amount increases are considered excessive.
+</p>
+<b>2. Bivariate Analysis:</b>
+<p>
+<b>Question :</b> Is there a relationship between total revenue and
+average session duration?
+</p>
+<p>
+<b>Visualization:</b> Scatter plot of Total Revenue and Avg Session
+Duration
+</p>
+
+``` r
+library(ggplot2)
+ggplot(News_Website_Dataset, aes(x = Avg_Session_Duration, y = Total_revenue)) +
+  geom_point(color = "blue") +
+  labs(title = "Total Revenue and Avg Session Duration",
+       x = "Average Session Duration",
+       y = "Total Revenue")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+<p>
+The scatter plot suggests a positive correlation between total revenue
+and average session duration, as higher revenue tends to coincide with
+longer session durations.
+</p>
+<b>3. Bivariate Analysis:</b>
+<p>
+<b>Question :</b> How does total revenue vary across different traffic
+sources?
+</p>
+<p>
+<b>Visualization:</b> Box plot of Total Revenue by Traffic Source
+</p>
+
+``` r
+library(ggplot2)
+ggplot(News_Website_Dataset, aes(x = Traffic_Source, y = Total_revenue, fill = Traffic_Source)) +
+  geom_boxplot() +
+  labs(title = "Total Revenue by Traffic Source",
+       x = "Traffic Source",
+       y = "Total Revenue")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+<p>
+The box plot shows variations in total revenue across different traffic
+sources, with some sources having higher median revenues compared to
+others.
+</p>
+<b>4. Multivariate Analysis:</b>
+<p>
+<b>Question :</b>How does total revenue vary across different device
+categories and time of day?
+</p>
+<p>
+<b>Visualization:</b> Line plot of Total Revenue by Time of Day, color
+by Device Category
+</p>
+
+``` r
+library(ggplot2)
+ggplot(News_Website_Dataset, aes(x = Time_of_Day, y = Total_revenue, color = Device_Category)) +  geom_line(size = 1.5) +
+  labs(title = "Total Revenue by Time of Day (Colored by Device Category)",
+       x = "Time of Day",
+       y = "Total Revenue")
+```
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+<p>
+The line plot illustrates how total revenue varies across different
+times of the day, with each line representing a different device
+category. It helps identify revenue trends based on the time of day and
+device usage.
+</p>
