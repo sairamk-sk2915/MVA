@@ -633,3 +633,157 @@ plot(data_projection2$PC3, data_projection2$PC4, col = "red",
 ```
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
+
+### Assignment 5
+
+<p>
+For each model, decide the optimal number of clusters and explain why
+</p>
+<p>
+Show the membership for each cluster
+</p>
+<p>
+show a visualization of the cluster and membership using the first two
+Principal Components
+</p>
+
+``` r
+# Load necessary libraries
+library(cluster)
+library(factoextra)
+```
+
+    ## Warning: package 'factoextra' was built under R version 4.3.2
+
+    ## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+
+``` r
+library(magrittr)
+library(NbClust)
+
+data <- read_excel("News Website Dataset.xlsx")
+
+data_num <- data[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue")]
+dist_matrix <- dist(data_num)
+
+# Hierarchical clustering
+hclust_model <- hclust(dist_matrix)
+
+plot(hclust_model)
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+num_clusters <- 3
+clusters <- cutree(hclust_model, k = num_clusters)
+
+# Membership for each cluster
+table(clusters)
+```
+
+    ## clusters
+    ##  1  2  3 
+    ##  4 12  4
+
+``` r
+# Visualize cluster and membership using first two Principal Components
+pca_result <- prcomp(data_num, scale = TRUE)
+fviz_cluster(list(data = pca_result$x[, 1:2], cluster = clusters))
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+``` r
+# Non-hierarchical clustering (k-means)
+num_clusters <- 2  
+kmeans_model <- kmeans(data_num, centers = num_clusters)
+
+# Membership for each cluster
+table(kmeans_model$cluster)
+```
+
+    ## 
+    ##  1  2 
+    ##  8 12
+
+``` r
+# Visualize cluster and membership using first two Principal Components
+fviz_cluster(list(data = pca_result$x[, 1:2], cluster = kmeans_model$cluster))
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
+
+``` r
+# Load necessary libraries
+library(cluster)
+library(factoextra)
+library(magrittr)
+library(NbClust)
+library(readxl)
+
+# Read the dataset
+data <- read_excel("News Website Dataset.xlsx")
+
+# Select numerical variables for clustering
+data_num <- data[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue")]
+
+# Perform hierarchical clustering
+dist_matrix <- dist(data_num)
+hclust_model <- hclust(dist_matrix)
+
+# Decide on the optimal number of clusters based on the dendrogram
+num_clusters_hclust <- 3  # Replace with chosen number of clusters
+
+# Perform non-hierarchical clustering (k-means)
+num_clusters_kmeans <- 2  # Replace with the chosen number of clusters
+kmeans_model <- kmeans(data_num, centers = num_clusters_kmeans)
+
+# Visualize cluster centers for k-means
+fviz_cluster(kmeans_model, data = data_num, geom = "point", frame.type = "convex", 
+             pointsize = 2, fill = "white", main = "K-means Cluster Centers")
+```
+
+    ## Warning: argument frame is deprecated; please use ellipse instead.
+
+    ## Warning: argument frame.type is deprecated; please use ellipse.type instead.
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+# Visualize cluster and membership using first two Principal Components for k-means
+pca_result <- prcomp(data_num, scale = TRUE)
+fviz_cluster(kmeans_model, data = pca_result$x[, 1:2], geom = "point", 
+             pointsize = 2, fill = "white", main = "K-means Clustering Result (PCA)")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+# Calculate silhouette information for k-means clustering
+sil <- silhouette(kmeans_model$cluster, dist(data_num))
+
+# Visualize the silhouette plot for k-means clustering
+fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
+```
+
+    ##   cluster size ave.sil.width
+    ## 1       1   12          0.80
+    ## 2       2    8          0.46
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
+
+``` r
+# Create a data frame with cluster membership
+data_clustered <- cbind(data_num, Cluster = kmeans_model$cluster)
+
+# Scatter plot of data points colored by cluster membership
+plot(data_clustered$Avg_Session_Duration, data_clustered$Total_Sessions, 
+     col = data_clustered$Cluster, pch = 16, 
+     xlab = "Avg_Session_Duration", ylab = "Total_Sessions",
+     main = "Scatter Plot of Clustering")
+legend("topright", legend = unique(data_clustered$Cluster), 
+       col = 1:num_clusters_kmeans, pch = 16, title = "Cluster")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-4.png)<!-- -->
