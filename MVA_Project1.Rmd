@@ -402,6 +402,7 @@ legend("topright", legend = unique(data_clustered$Cluster),
 ```
 
 ### Assignment 6
+
 <h4>Factor Analysis</h4>
 
 <p><b>1. Decide how many Factors are ideal for your dataset</b></p>
