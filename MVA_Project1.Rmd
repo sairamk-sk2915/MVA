@@ -400,3 +400,31 @@ legend("topright", legend = unique(data_clustered$Cluster),
        col = 1:num_clusters_kmeans, pch = 16, title = "Cluster")
 
 ```
+### Assignment 6
+<h4>Conversion_Rate</h4>
+<p><b>Decide how many Factors are ideal for your dataset</b></p>
+<p>I am Using 4 Factors for this Assignment</p>
+
+<p><b>Explain the output for your factor model</b></p>
+<p>In analyzing the data, I found two main factors, MR1 and MR2. Factor 1 is primarily influenced by "Avg_Session_Duration", "Total_Sessions", and "Total_revenue". These variables play significant roles in determining the outcome of Factor 1. On the other hand, Factor 2 is  "Conversion_Rate". However, Factor 3 doesn't significantly impact the analysis as none of the variables have substantial loadings on this factor.</p>
+
+<p><b>Show the columns that go into each factor and Perform some visualizations using the factors</b></p>
+
+```{r}
+library(psych)
+library(readxl)
+data <- read_excel("News Website Dataset_2.xlsx")
+data_num <- data[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
+factor_model <- fa(data_num, nfactors = 3, rotate = "varimax")
+
+fa.parallel(data_num[-1])
+
+print(factor_model)
+
+factor_loadings <- factor_model$loadings
+print(factor_loadings)
+
+#some visualizations
+fa.plot(factor_model)      # See Correlations within Factors
+fa.diagram(factor_model)   # Visualize the relationship
+```

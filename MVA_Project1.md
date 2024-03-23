@@ -705,7 +705,7 @@ table(kmeans_model$cluster)
 
     ## 
     ##  1  2 
-    ##  8 12
+    ##  4 16
 
 ``` r
 # Visualize cluster and membership using first two Principal Components
@@ -768,8 +768,8 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
 ```
 
     ##   cluster size ave.sil.width
-    ## 1       1   12          0.80
-    ## 2       2    8          0.46
+    ## 1       1    8          0.46
+    ## 2       2   12          0.80
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
@@ -787,3 +787,168 @@ legend("topright", legend = unique(data_clustered$Cluster),
 ```
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-4.png)<!-- -->
+
+### Assignment 6
+
+<h4>
+Factor Analysis
+</h4>
+<p>
+<b>1. Decide how many Factors are ideal for your dataset</b>
+</p>
+<p>
+Parallel analysis suggests that the number of factors = 1 and the number
+of components = 1
+</p>
+<p>
+<b>2. Explain the output for your factor model</b>
+</p>
+<p>
+<b>Standardized Loadings</b>
+</p>
+<p>
+Avg_Session_Duration has low loadings on all factors, with the highest
+loading on MR3 (0.32).
+</p>
+<p>
+Total_Sessions has the highest loading on MR2 (0.34).
+</p>
+<p>
+Total_revenue and Conversion_Rate both have the highest loadings on MR1
+(0.48 and 0.50, respectively).
+</p>
+<p>
+<b>SS Loadings</b>
+</p>
+<p>
+MR1 explains 12% of the total variance., MR2 explains 4% of the total
+variance., MR3 explains 3% of the total variance.
+</p>
+<p>
+MR1 might be related to conversion rate and potentially session duration
+(positive loadings).
+</p>
+<p>
+MR2 is positively associated with the total number of sessions.
+</p>
+<p>
+MR3 has weaker and mixed relationships with the variables.
+</p>
+<p>
+we can conclude that a 3-factor solution adequately explains the
+structure of the data. Each factor captures a unique aspect of the
+underlying structure, with Total_revenue and Conversion_Rate loading
+primarily on MR1, Total_Sessions on MR2, and Avg_Session_Duration on
+MR3.
+</p>
+<p>
+<b> 3&4 Show the columns that go into each factor and Perform some
+visualizations using the factors</b>
+</p>
+<p>
+
+we can see the below code to answer 3&4.
+
+``` r
+library(psych)
+```
+
+    ## Warning: package 'psych' was built under R version 4.3.3
+
+    ## 
+    ## Attaching package: 'psych'
+
+    ## The following objects are masked from 'package:ggplot2':
+    ## 
+    ##     %+%, alpha
+
+``` r
+library(readxl)
+data <- read_excel("News Website Dataset_2.xlsx")
+data_num <- data[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
+factor_model <- fa(data_num, nfactors = 3, rotate = "varimax")
+
+fa.parallel(data_num[-1])
+```
+
+    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+    ## The estimated weights for the factor scores are probably incorrect.  Try a
+    ## different factor score estimation method.
+
+    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
+    ## ultra-Heywood case was detected.  Examine the results carefully
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+    ## Parallel analysis suggests that the number of factors =  1  and the number of components =  1
+
+``` r
+print(factor_model)
+```
+
+    ## Factor Analysis using method =  minres
+    ## Call: fa(r = data_num, nfactors = 3, rotate = "varimax")
+    ## Standardized loadings (pattern matrix) based upon correlation matrix
+    ##                        MR1   MR2   MR3   h2   u2 com
+    ## Avg_Session_Duration -0.02  0.03  0.32 0.10 0.90 1.0
+    ## Total_Sessions        0.01  0.34  0.03 0.12 0.88 1.0
+    ## Total_revenue         0.48  0.18 -0.18 0.30 0.70 1.6
+    ## Conversion_Rate       0.50 -0.07  0.05 0.25 0.75 1.1
+    ## 
+    ##                        MR1  MR2  MR3
+    ## SS loadings           0.48 0.15 0.14
+    ## Proportion Var        0.12 0.04 0.03
+    ## Cumulative Var        0.12 0.16 0.19
+    ## Proportion Explained  0.62 0.20 0.18
+    ## Cumulative Proportion 0.62 0.82 1.00
+    ## 
+    ## Mean item complexity =  1.2
+    ## Test of the hypothesis that 3 factors are sufficient.
+    ## 
+    ## df null model =  6  with the objective function =  0.06 with Chi Square =  9.18
+    ## df of  the model are -3  and the objective function was  0 
+    ## 
+    ## The root mean square of the residuals (RMSR) is  0 
+    ## The df corrected root mean square of the residuals is  NA 
+    ## 
+    ## The harmonic n.obs is  160 with the empirical chi square  0  with prob <  NA 
+    ## The total n.obs was  160  with Likelihood Chi Square =  0  with prob <  NA 
+    ## 
+    ## Tucker Lewis Index of factoring reliability =  2.959
+    ## Fit based upon off diagonal values = 1
+    ## Measures of factor score adequacy             
+    ##                                                     MR1   MR2   MR3
+    ## Correlation of (regression) scores with factors    0.63  0.39  0.37
+    ## Multiple R square of scores with factors           0.39  0.15  0.14
+    ## Minimum correlation of possible factor scores     -0.21 -0.69 -0.72
+
+``` r
+factor_loadings <- factor_model$loadings
+print(factor_loadings)
+```
+
+    ## 
+    ## Loadings:
+    ##                      MR1    MR2    MR3   
+    ## Avg_Session_Duration                0.320
+    ## Total_Sessions               0.342       
+    ## Total_revenue         0.483  0.176 -0.184
+    ## Conversion_Rate       0.496              
+    ## 
+    ##                 MR1   MR2   MR3
+    ## SS loadings    0.48 0.154 0.140
+    ## Proportion Var 0.12 0.039 0.035
+    ## Cumulative Var 0.12 0.159 0.193
+
+``` r
+#some visualizations
+fa.plot(factor_model)      # See Correlations within Factors
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+
+``` r
+fa.diagram(factor_model)   # Visualize the relationship
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
