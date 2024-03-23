@@ -768,8 +768,8 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
 ```
 
     ##   cluster size ave.sil.width
-    ## 1       1    8          0.46
-    ## 2       2   12          0.80
+    ## 1       1   12          0.80
+    ## 2       2    8          0.46
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
@@ -871,16 +871,9 @@ factor_model <- fa(data_num, nfactors = 3, rotate = "varimax")
 fa.parallel(data_num[-1])
 ```
 
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
-
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
-
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-    ## Parallel analysis suggests that the number of factors =  1  and the number of components =  1
+    ## Parallel analysis suggests that the number of factors =  1  and the number of components =  0
 
 ``` r
 print(factor_model)

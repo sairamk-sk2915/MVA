@@ -400,16 +400,32 @@ legend("topright", legend = unique(data_clustered$Cluster),
        col = 1:num_clusters_kmeans, pch = 16, title = "Cluster")
 
 ```
+
 ### Assignment 6
-<h4>Conversion_Rate</h4>
-<p><b>Decide how many Factors are ideal for your dataset</b></p>
-<p>I am Using 4 Factors for this Assignment</p>
+<h4>Factor Analysis</h4>
 
-<p><b>Explain the output for your factor model</b></p>
-<p>In analyzing the data, I found two main factors, MR1 and MR2. Factor 1 is primarily influenced by "Avg_Session_Duration", "Total_Sessions", and "Total_revenue". These variables play significant roles in determining the outcome of Factor 1. On the other hand, Factor 2 is  "Conversion_Rate". However, Factor 3 doesn't significantly impact the analysis as none of the variables have substantial loadings on this factor.</p>
+<p><b>1. Decide how many Factors are ideal for your dataset</b></p>
+<p>Parallel analysis suggests that the number of factors =  1  and the number of components =  1</p>
 
-<p><b>Show the columns that go into each factor and Perform some visualizations using the factors</b></p>
+<p><b>2. Explain the output for your factor model</b></p>
+<p><b>Standardized Loadings</b></p>
+<p>Avg_Session_Duration has low loadings on all factors, with the highest loading on MR3 (0.32).</p>
+<p>Total_Sessions has the highest loading on MR2 (0.34).</p>
+<p>Total_revenue and Conversion_Rate both have the highest loadings on MR1 (0.48 and 0.50, respectively).</p>
 
+<p><b>SS Loadings</b></p>
+<p>MR1 explains 12% of the total variance., 
+MR2 explains 4% of the total variance., 
+MR3 explains 3% of the total variance.</p>
+
+<p>MR1 might be related to conversion rate and potentially session duration (positive loadings).</p>
+<p>MR2 is positively associated with the total number of sessions.</p>
+<p>MR3 has weaker and mixed relationships with the variables.</p>
+
+<p>we can conclude that a 3-factor solution adequately explains the structure of the data. Each factor captures a unique aspect of the underlying structure, with Total_revenue and Conversion_Rate loading primarily on MR1, Total_Sessions on MR2, and Avg_Session_Duration on MR3.</p>
+
+<p><b> 3&4 Show the columns that go into each factor and Perform some visualizations using the factors</b></p>
+<p>we can see the below code to answer 3&4.
 ```{r}
 library(psych)
 library(readxl)
