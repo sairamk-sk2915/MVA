@@ -1,0 +1,23 @@
+---
+title: "Social Media"
+author: "Satya Shiva Sai Ram Kamma"
+date: "2024-03-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Social Media
+
+```{r}
+
+library(readxl)
+data <- read_excel("social_media_cleaned.xlsx")
+data <- data[, -1]
+distance = as.matrix(dist(scale(data)))
+sum(distance[17,])
+```
+
+
