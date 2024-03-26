@@ -19,5 +19,3 @@ data <- data[, -1]
 distance = as.matrix(dist(scale(data)))
 sum(distance[17,])
 ```
-
-
