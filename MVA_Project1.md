@@ -768,8 +768,8 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
 ```
 
     ##   cluster size ave.sil.width
-    ## 1       1   12          0.80
-    ## 2       2    8          0.46
+    ## 1       1    4          1.00
+    ## 2       2   16          0.69
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
@@ -873,7 +873,7 @@ fa.parallel(data_num[-1])
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-    ## Parallel analysis suggests that the number of factors =  1  and the number of components =  0
+    ## Parallel analysis suggests that the number of factors =  1  and the number of components =  1
 
 ``` r
 print(factor_model)
@@ -945,3 +945,19 @@ fa.diagram(factor_model)   # Visualize the relationship
 ```
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+
+### Assignment 6
+
+### Multiple Regression Analysis
+
+<p>
+Multiple regression analysis is a statistical technique that extends
+simple linear regression by considering the combined effect of two or
+more independent variables on a single dependent variable. It helps us
+understand how these independent variables influence the dependent
+variable, predict the value of the dependent variable based on the
+independent ones, and assess the relative importance of each independent
+variable while accounting for the influence of others. This makes it a
+powerful tool for various fields like business, finance, and social
+science to uncover relationships and make predictions.
+</p>

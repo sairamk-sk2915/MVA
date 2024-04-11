@@ -445,3 +445,31 @@ print(factor_loadings)
 fa.plot(factor_model)      # See Correlations within Factors
 fa.diagram(factor_model)   # Visualize the relationship
 ```
+
+### Assignment 6
+### Multiple Regression Analysis
+<p>Multiple regression analysis is a statistical technique that extends simple linear regression by considering the combined effect of two or more independent variables on a single dependent variable. It helps us understand how these independent variables influence the dependent variable,  predict the value of the dependent variable based on the independent ones, and assess the relative importance of each independent variable while accounting for the influence of others. This makes it a powerful tool for various fields like business, finance, and social science to uncover relationships and make predictions.</p>
+
+#### Model Development
+
+<p>We will load the data and convert the data into numerical. we will split the data into training and testing data. then we will perform multiple regression model</p>
+
+```{r}
+library(readxl)
+library(dplyr)
+
+mydata <- read_excel("News Website Dataset_2.xlsx")
+data_num <- mydata[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
+
+model_formula <- lm(Conversion_Rate ~ Time_of_Day + Traffic_Source + 
+                    Landing_Page + Campaign + 
+                    Content_Category + Device_Category + 
+                    Avg_Session_Duration, data = mydata)
+model_fit <- summary(model_formula)
+print(model_fit)
+
+coef(model_fit)
+summary(model_fit)$r[1]
+summary(model_fit)$coefficients[,4]
+```
+
