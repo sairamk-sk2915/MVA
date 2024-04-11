@@ -446,7 +446,7 @@ fa.plot(factor_model)      # See Correlations within Factors
 fa.diagram(factor_model)   # Visualize the relationship
 ```
 
-### Assignment 6
+### Assignment 7
 ### Multiple Regression Analysis
 <p>Multiple regression analysis is a statistical technique that extends simple linear regression by considering the combined effect of two or more independent variables on a single dependent variable. It helps us understand how these independent variables influence the dependent variable,  predict the value of the dependent variable based on the independent ones, and assess the relative importance of each independent variable while accounting for the influence of others. This makes it a powerful tool for various fields like business, finance, and social science to uncover relationships and make predictions.</p>
 

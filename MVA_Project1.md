@@ -705,7 +705,7 @@ table(kmeans_model$cluster)
 
     ## 
     ##  1  2 
-    ##  8 12
+    ##  4 16
 
 ``` r
 # Visualize cluster and membership using first two Principal Components
@@ -946,7 +946,7 @@ fa.diagram(factor_model)   # Visualize the relationship
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
 
-### Assignment 6
+### Assignment 7
 
 ### Multiple Regression Analysis
 
