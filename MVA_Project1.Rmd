@@ -454,6 +454,15 @@ fa.diagram(factor_model)   # Visualize the relationship
 
 <p>We will load the data and convert the data into numerical. we will split the data into training and testing data. then we will perform multiple regression model</p>
 
+#### Model Acceptance 
+<p>Model acceptance involves evaluating the performance of the multiple regression model on unseen data or a testing dataset</p>
+<p>It evaluates the model's performance through coefficient summaries, diagnostic plots, and confidence intervals. Overall, it aims to assess the model's acceptance by analyzing its fit to the data and the significance of predictor variables.</p>
+
+#### Residual Analysis
+<p>Residual analysis is crucial for evaluating the assumptions of the multiple regression model and identifying any patterns or trends in the residuals</p>
+
+<p>It will generate diagnostic plots, including a plot of residuals vs. fitted values, a QQ plot of residuals, and a scale-location plot. These plots can help you assess the assumptions of the multiple regression model.</p>
+
 ```{r}
 library(readxl)
 library(dplyr)
@@ -461,15 +470,48 @@ library(dplyr)
 mydata <- read_excel("News Website Dataset_2.xlsx")
 data_num <- mydata[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
 
-model_formula <- lm(Conversion_Rate ~ Time_of_Day + Traffic_Source + 
+model <- lm(Conversion_Rate ~ Time_of_Day + Traffic_Source + 
                     Landing_Page + Campaign + 
                     Content_Category + Device_Category + 
                     Avg_Session_Duration, data = mydata)
-model_fit <- summary(model_formula)
+model_fit <- summary(model)
 print(model_fit)
+plot(model)
+coefficients(model_fit)
+library(GGally)
+ggpairs(data=mydata, title="News Website Data")
+confint(model_fit,level=0.95)
+fitted(model_fit)
+residuals(model_fit)
+```
 
-coef(model_fit)
-summary(model_fit)$r[1]
-summary(model_fit)$coefficients[,4]
+#### Prediction
+<p>The predict() function will generate predicted values of the dependent variable (Total_revenue) based on the provided predictors.</p>
+```{r}
+new_data <- data.frame(Time_of_Day = "Morning",
+                       Traffic_Source = "Organic Search",
+                       Landing_Page = "/blog/new-product",
+                       Campaign = "SEO Campaign",
+                       Content_Category = "Blog",
+                       Device_Category = "Desktop",
+                       Avg_Session_Duration = 4.23,
+                       Total_Sessions = 325,
+                       Conversion_Rate = 0.35)
+
+# Make predictions
+predicted_total_revenue <- predict(model, newdata = new_data)
+predicted_total_revenue
+```
+##### Model Accuracy
+<p>Model accuracy can be assessed using various metrics, such as R-squared, adjusted R-squared, and root mean squared error (RMSE). Here's how you can calculate these metrics</p>
+```{r}
+#Model Accuracy
+rsquared <- summary(model)$r.squared
+cat("R-squared:", rsquared, "\n")
+adjusted_rsquared <- summary(model)$adj.r.squared
+cat("Adjusted R-squared:", adjusted_rsquared, "\n")
+predictions <- predict(model)
+rmse <- sqrt(mean((data$Total_revenue - predictions)^2))
+cat("RMSE:", rmse, "\n")
 ```
 

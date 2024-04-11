@@ -705,7 +705,7 @@ table(kmeans_model$cluster)
 
     ## 
     ##  1  2 
-    ##  4 16
+    ##  8 12
 
 ``` r
 # Visualize cluster and membership using first two Principal Components
@@ -961,3 +961,297 @@ variable while accounting for the influence of others. This makes it a
 powerful tool for various fields like business, finance, and social
 science to uncover relationships and make predictions.
 </p>
+
+#### Model Development
+
+<p>
+We will load the data and convert the data into numerical. we will split
+the data into training and testing data. then we will perform multiple
+regression model
+</p>
+
+#### Model Acceptance
+
+<p>
+Model acceptance involves evaluating the performance of the multiple
+regression model on unseen data or a testing dataset
+</p>
+<p>
+It evaluates the model’s performance through coefficient summaries,
+diagnostic plots, and confidence intervals. Overall, it aims to assess
+the model’s acceptance by analyzing its fit to the data and the
+significance of predictor variables.
+</p>
+
+#### Residual Analysis
+
+<p>
+Residual analysis is crucial for evaluating the assumptions of the
+multiple regression model and identifying any patterns or trends in the
+residuals
+</p>
+<p>
+It will generate diagnostic plots, including a plot of residuals
+vs. fitted values, a QQ plot of residuals, and a scale-location plot.
+These plots can help you assess the assumptions of the multiple
+regression model.
+</p>
+
+``` r
+library(readxl)
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+mydata <- read_excel("News Website Dataset_2.xlsx")
+data_num <- mydata[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
+
+model <- lm(Conversion_Rate ~ Time_of_Day + Traffic_Source + 
+                    Landing_Page + Campaign + 
+                    Content_Category + Device_Category + 
+                    Avg_Session_Duration, data = mydata)
+model_fit <- summary(model)
+print(model_fit)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = Conversion_Rate ~ Time_of_Day + Traffic_Source + 
+    ##     Landing_Page + Campaign + Content_Category + Device_Category + 
+    ##     Avg_Session_Duration, data = mydata)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.46689 -0.17101  0.00555  0.18987  0.40556 
+    ## 
+    ## Coefficients: (12 not defined because of singularities)
+    ##                                Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)                    0.537965   0.068696   7.831 7.92e-13 ***
+    ## Time_of_DayEvening             0.040988   0.052290   0.784    0.434    
+    ## Time_of_DayMorning            -0.039018   0.052269  -0.746    0.457    
+    ## Time_of_DayNight               0.031191   0.052393   0.595    0.553    
+    ## Traffic_SourceOrganic Search  -0.009775   0.058807  -0.166    0.868    
+    ## Traffic_SourceOrganic Social  -0.076678   0.058599  -1.309    0.193    
+    ## Traffic_SourcePaid Search      0.019777   0.059268   0.334    0.739    
+    ## Traffic_SourceReferral        -0.039162   0.058389  -0.671    0.503    
+    ## Landing_Page/article-page            NA         NA      NA       NA    
+    ## Landing_Page/blog/new-product        NA         NA      NA       NA    
+    ## Landing_Page/catgory-page            NA         NA      NA       NA    
+    ## Landing_PageMobile                   NA         NA      NA       NA    
+    ## CampaignPaid                         NA         NA      NA       NA    
+    ## CampaignSEO Campaign                 NA         NA      NA       NA    
+    ## CampaignSocial Media                 NA         NA      NA       NA    
+    ## Content_CategoryBlog                 NA         NA      NA       NA    
+    ## Content_CategoryHomepage             NA         NA      NA       NA    
+    ## Content_CategoryProduct              NA         NA      NA       NA    
+    ## Device_CategoryMobile                NA         NA      NA       NA    
+    ## Device_CategoryTablet                NA         NA      NA       NA    
+    ## Avg_Session_Duration          -0.002713   0.015963  -0.170    0.865    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.2335 on 151 degrees of freedom
+    ## Multiple R-squared:  0.03912,    Adjusted R-squared:  -0.01179 
+    ## F-statistic: 0.7684 on 8 and 151 DF,  p-value: 0.6311
+
+``` r
+plot(model)
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->
+
+``` r
+coefficients(model_fit)
+```
+
+    ##                                  Estimate Std. Error    t value     Pr(>|t|)
+    ## (Intercept)                   0.537965201 0.06869645  7.8310480 7.921501e-13
+    ## Time_of_DayEvening            0.040988434 0.05228957  0.7838740 4.343419e-01
+    ## Time_of_DayMorning           -0.039017597 0.05226948 -0.7464699 4.565442e-01
+    ## Time_of_DayNight              0.031191238 0.05239325  0.5953293 5.525145e-01
+    ## Traffic_SourceOrganic Search -0.009774794 0.05880742 -0.1662170 8.682085e-01
+    ## Traffic_SourceOrganic Social -0.076678220 0.05859907 -1.3085228 1.926842e-01
+    ## Traffic_SourcePaid Search     0.019776721 0.05926824  0.3336816 7.390828e-01
+    ## Traffic_SourceReferral       -0.039161739 0.05838940 -0.6706994 5.034366e-01
+    ## Avg_Session_Duration         -0.002713297 0.01596264 -0.1699780 8.652549e-01
+
+``` r
+library(GGally)
+```
+
+    ## Warning: package 'GGally' was built under R version 4.3.2
+
+    ## Registered S3 method overwritten by 'GGally':
+    ##   method from   
+    ##   +.gg   ggplot2
+
+``` r
+ggpairs(data=mydata, title="News Website Data")
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-5.png)<!-- -->
+
+``` r
+confint(model_fit,level=0.95)
+```
+
+    ##      2.5 % 97.5 %
+
+``` r
+fitted(model_fit)
+```
+
+    ## NULL
+
+``` r
+residuals(model_fit)
+```
+
+    ##            1            2            3            4            5            6 
+    ## -0.123111549 -0.360096786 -0.046027030 -0.246940173  0.090742721  0.279170568 
+    ##            7            8            9           10           11           12 
+    ## -0.084165414 -0.079500866 -0.373352326 -0.030002640  0.065996420  0.009022928 
+    ##           13           14           15           16           17           18 
+    ##  0.255899954 -0.431288001 -0.127944432  0.023653774  0.093244837  0.371814707 
+    ##           19           20           21           22           23           24 
+    ##  0.027734704  0.091621759 -0.209843374  0.360816270  0.119593866 -0.239902084 
+    ##           25           26           27           28           29           30 
+    ## -0.232559140  0.081424396 -0.004229678  0.117924690 -0.053054172  0.151867910 
+    ##           31           32           33           34           35           36 
+    ## -0.310992608  0.063824503 -0.377451127  0.270602312 -0.355422527 -0.329935855 
+    ##           37           38           39           40           41           42 
+    ## -0.061813639  0.249580217 -0.358341559  0.365273927  0.030534362  0.236312512 
+    ##           43           44           45           46           47           48 
+    ##  0.346700813  0.144262893 -0.136887797  0.060319312 -0.441863854  0.244915562 
+    ##           49           50           51           52           53           54 
+    ##  0.147777897  0.326369306  0.141827334 -0.023418115  0.041554918  0.305013827 
+    ##           55           56           57           58           59           60 
+    ## -0.023335016 -0.370417408  0.093208352  0.039649306  0.045803711  0.267400274 
+    ##           61           62           63           64           65           66 
+    ##  0.060489292  0.122278448 -0.278054848  0.399083448 -0.144719595  0.189101089 
+    ##           67           68           69           70           71           72 
+    ## -0.175368439 -0.326034289  0.315382296 -0.219911381  0.322271240  0.192161019 
+    ##           73           74           75           76           77           78 
+    ## -0.286943859  0.240446052  0.324639201 -0.223598971  0.046085663 -0.008242092 
+    ##           79           80           81           82           83           84 
+    ## -0.292260879 -0.333806322 -0.156603080 -0.101445318 -0.165814034  0.120829214 
+    ##           85           86           87           88           89           90 
+    ##  0.385213151  0.039170934 -0.343622378 -0.159370260  0.229683603 -0.011793418 
+    ##           91           92           93           94           95           96 
+    ##  0.264922063 -0.321647007 -0.133505316 -0.367563941  0.144935805  0.024284176 
+    ##           97           98           99          100          101          102 
+    ## -0.011638078  0.315526566  0.331373291 -0.281370264 -0.075692822  0.277153216 
+    ##          103          104          105          106          107          108 
+    ## -0.146933440  0.159272741 -0.286633491 -0.083138765  0.234027741 -0.033674470 
+    ##          109          110          111          112          113          114 
+    ## -0.021826323  0.405560900  0.012343414  0.008203661  0.033391106  0.179917522 
+    ##          115          116          117          118          119          120 
+    ##  0.042710685 -0.170625779  0.309936765  0.220707934  0.170953304  0.138579779 
+    ##          121          122          123          124          125          126 
+    ##  0.186763487  0.349762438 -0.108857930 -0.347999516 -0.287034066 -0.078285826 
+    ##          127          128          129          130          131          132 
+    ##  0.277991822  0.252252540 -0.124300251 -0.149213432  0.132150795  0.002901012 
+    ##          133          134          135          136          137          138 
+    ## -0.219110133 -0.292321108  0.277233878 -0.237114062 -0.255744886 -0.080619173 
+    ##          139          140          141          142          143          144 
+    ##  0.249248258  0.319564669  0.340417849  0.001617525 -0.043619849  0.273816829 
+    ##          145          146          147          148          149          150 
+    ## -0.266885154  0.041197439 -0.237471298 -0.037324863 -0.154469625 -0.172164040 
+    ##          151          152          153          154          155          156 
+    ##  0.321977135  0.210863633 -0.368543808 -0.160486732 -0.064836686 -0.248654980 
+    ##          157          158          159          160 
+    ## -0.466887456  0.290115205 -0.147095211 -0.207194563
+
+#### Prediction
+
+<p>
+The predict() function will generate predicted values of the dependent
+variable (Total_revenue) based on the provided predictors.
+</p>
+
+``` r
+new_data <- data.frame(Time_of_Day = "Morning",
+                       Traffic_Source = "Organic Search",
+                       Landing_Page = "/blog/new-product",
+                       Campaign = "SEO Campaign",
+                       Content_Category = "Blog",
+                       Device_Category = "Desktop",
+                       Avg_Session_Duration = 4.23,
+                       Total_Sessions = 325,
+                       Conversion_Rate = 0.35)
+
+# Make predictions
+predicted_total_revenue <- predict(model, newdata = new_data)
+predicted_total_revenue
+```
+
+    ##         1 
+    ## 0.4776956
+
+##### Model Accuracy
+
+<p>
+Model accuracy can be assessed using various metrics, such as R-squared,
+adjusted R-squared, and root mean squared error (RMSE). Here’s how you
+can calculate these metrics
+</p>
+
+``` r
+#Model Accuracy
+rsquared <- summary(model)$r.squared
+cat("R-squared:", rsquared, "\n")
+```
+
+    ## R-squared: 0.03911893
+
+``` r
+adjusted_rsquared <- summary(model)$adj.r.squared
+cat("Adjusted R-squared:", adjusted_rsquared, "\n")
+```
+
+    ## Adjusted R-squared: -0.01178868
+
+``` r
+predictions <- predict(model)
+rmse <- sqrt(mean((data$Total_revenue - predictions)^2))
+cat("RMSE:", rmse, "\n")
+```
+
+    ## RMSE: 193.7647
