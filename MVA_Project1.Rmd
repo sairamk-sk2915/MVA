@@ -1,5 +1,5 @@
 ---
-title: "Project1"
+title: "News Website Traffic and Revenue Analysing Dataset"
 author: "Satya Shiva Sai Ram Kamma"
 date: "2024-02-11"
 output: github_document
@@ -8,8 +8,6 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## News Website Traffic and Revenue Analysing Dataset
 
 I'm creating the dataset for the News website, which mostly depends on website traffic and repeated visitors to earn revenue.
 
@@ -514,4 +512,94 @@ predictions <- predict(model)
 rmse <- sqrt(mean((data$Total_revenue - predictions)^2))
 cat("RMSE:", rmse, "\n")
 ```
+
+### Assignment 8
+#### Logistic Regression Analysis
+<p>To perform logistic regression analysis, we will use the glm() function.</p>
+
+* Load all necessary packages 
+* Load Data. we Used read_excel() function to read data from excel
+* Now we will use glm() function to fit a logistic regression model to the data.
+* Now use summary() function for logistic regression model to view coefficients, standard errors, z-values, and p-values.
+* For Residual Analysis use plot() function to get Plot diagnostic plots, including residuals vs. fitted values, QQ plot of residuals, and scale-location plot, to check for homoscedasticity and normality of residuals.
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ROCR)
+library(pROC)
+
+mydata <- read_excel("News Website Dataset_2.xlsx")
+threshold <- 200
+
+mydata$Revenue_Binary <- ifelse(mydata$Total_revenue > threshold, 1, 0)
+
+logit_model <- glm(Revenue_Binary ~  Total_Sessions
++ Conversion_Rate + Avg_Session_Duration, 
+                    data = mydata, 
+                    family = binomial)
+summary(logit_model)
+anova(logit_model)
+
+# Residual Analysis
+plot(logit_model)
+
+predicted_prob <- predict(logit_model, type = "response")
+
+# Create prediction object
+predictions <- prediction(predicted_prob, mydata$Revenue_Binary)
+
+roc_curve <- roc(mydata$Revenue_Binary, predicted_prob)
+
+# Plot ROC curve
+plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+
+# Calculate AUC
+auc_value <- auc(roc_curve)
+cat("AUC:", auc_value, "\n")
+
+# Calculate performance measures
+perf <- performance(predictions, "tpr", "fpr")
+
+# Plot ROC curve
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+
+# Plot ROC curve
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2, 
+     xlab = "False Positive Rate", ylab = "True Positive Rate", 
+     xlim = c(0, 1), ylim = c(0, 1))
+abline(a = 0, b = 1, lty = 2, col = "red")  # Diagonal line for reference
+
+# Add AUC value to the plot
+auc_value <- performance(predictions, "auc")@y.values[[1]]
+text(0.5, 0.5, paste("AUC =", round(auc_value, 2)), col = "#4daf4a", lwd=4)
+
+
+# Prediction 
+new_data <- mydata[1:10, ]
+predictions <- predict(logit_model, newdata = new_data, type = "response")
+print(predictions)
+hist(predictions, breaks = 20, col = "lightblue", main = "Histogram of Predicted Probabilities")
+
+# Model Acceptance
+predicted <- predict(logit_model, type = "response")
+predicted_binary <- ifelse(predicted > 0.5, 1, 0)
+confusion <- table(predicted_binary, mydata$Revenue_Binary)
+accuracy <- sum(diag(confusion)) / sum(confusion)
+precision <- confusion[2, 2] / sum(confusion[, 2])
+recall <- confusion[2, 2] / sum(confusion[2, ])
+f1_score <- 2 * precision * recall / (precision + recall)
+auc <- roc(mydata$Revenue_Binary, predicted)$auc
+
+# Model Accuracy
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Recall:", recall, "\n")
+cat("F1-score:", f1_score, "\n")
+cat("AUC:", auc, "\n")
+
+```
+<p>This code reads a dataset from an Excel file, preprocesses it to create a binary outcome variable based on a threshold, fits a logistic regression model to predict this outcome using three predictor variables, conducts residual analysis, evaluates model performance using ROC curve and calculates AUC, makes predictions for a subset of the data, and assesses model accuracy metrics including accuracy, precision, recall, F1-score, and AUC.</p>
 

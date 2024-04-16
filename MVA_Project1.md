@@ -1,9 +1,7 @@
-Project1
+News Website Traffic and Revenue Analysing Dataset
 ================
 Satya Shiva Sai Ram Kamma
 2024-02-11
-
-## News Website Traffic and Revenue Analysing Dataset
 
 I’m creating the dataset for the News website, which mostly depends on
 website traffic and repeated visitors to earn revenue.
@@ -705,7 +703,7 @@ table(kmeans_model$cluster)
 
     ## 
     ##  1  2 
-    ##  4 16
+    ## 12  8
 
 ``` r
 # Visualize cluster and membership using first two Principal Components
@@ -768,8 +766,8 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
 ```
 
     ##   cluster size ave.sil.width
-    ## 1       1    4          1.00
-    ## 2       2   16          0.69
+    ## 1       1    8          0.46
+    ## 2       2   12          0.80
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
@@ -1255,3 +1253,230 @@ cat("RMSE:", rmse, "\n")
 ```
 
     ## RMSE: 193.7647
+
+### Assignment 8
+
+#### Logistic Regression Analysis
+
+<p>
+To perform logistic regression analysis, we will use the glm() function.
+</p>
+
+- Load all necessary packages
+- Load Data. we Used read_excel() function to read data from excel
+- Now we will use glm() function to fit a logistic regression model to
+  the data.
+- Now use summary() function for logistic regression model to view
+  coefficients, standard errors, z-values, and p-values.
+- For Residual Analysis use plot() function to get Plot diagnostic
+  plots, including residuals vs. fitted values, QQ plot of residuals,
+  and scale-location plot, to check for homoscedasticity and normality
+  of residuals.
+
+``` r
+library(readxl)
+library(dplyr)
+library(ROCR)
+```
+
+    ## Warning: package 'ROCR' was built under R version 4.3.3
+
+``` r
+library(pROC)
+```
+
+    ## Type 'citation("pROC")' for a citation.
+
+    ## 
+    ## Attaching package: 'pROC'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     cov, smooth, var
+
+``` r
+mydata <- read_excel("News Website Dataset_2.xlsx")
+threshold <- 200
+
+mydata$Revenue_Binary <- ifelse(mydata$Total_revenue > threshold, 1, 0)
+
+logit_model <- glm(Revenue_Binary ~  Total_Sessions
++ Conversion_Rate + Avg_Session_Duration, 
+                    data = mydata, 
+                    family = binomial)
+summary(logit_model)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = Revenue_Binary ~ Total_Sessions + Conversion_Rate + 
+    ##     Avg_Session_Duration, family = binomial, data = mydata)
+    ## 
+    ## Coefficients:
+    ##                        Estimate Std. Error z value Pr(>|z|)
+    ## (Intercept)          -0.8493387  0.7351481  -1.155    0.248
+    ## Total_Sessions        0.0002231  0.0014133   0.158    0.875
+    ## Conversion_Rate       1.1609186  0.7192518   1.614    0.107
+    ## Avg_Session_Duration -0.1110208  0.1379476  -0.805    0.421
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 211.70  on 159  degrees of freedom
+    ## Residual deviance: 208.39  on 156  degrees of freedom
+    ## AIC: 216.39
+    ## 
+    ## Number of Fisher Scoring iterations: 4
+
+``` r
+anova(logit_model)
+```
+
+    ## Analysis of Deviance Table
+    ## 
+    ## Model: binomial, link: logit
+    ## 
+    ## Response: Revenue_Binary
+    ## 
+    ## Terms added sequentially (first to last)
+    ## 
+    ## 
+    ##                      Df Deviance Resid. Df Resid. Dev
+    ## NULL                                   159     211.70
+    ## Total_Sessions        1  0.01422       158     211.69
+    ## Conversion_Rate       1  2.64650       157     209.04
+    ## Avg_Session_Duration  1  0.64962       156     208.39
+
+``` r
+# Residual Analysis
+plot(logit_model)
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-4.png)<!-- -->
+
+``` r
+predicted_prob <- predict(logit_model, type = "response")
+
+# Create prediction object
+predictions <- prediction(predicted_prob, mydata$Revenue_Binary)
+
+roc_curve <- roc(mydata$Revenue_Binary, predicted_prob)
+```
+
+    ## Setting levels: control = 0, case = 1
+
+    ## Setting direction: controls < cases
+
+``` r
+# Plot ROC curve
+plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-5.png)<!-- -->
+
+``` r
+# Calculate AUC
+auc_value <- auc(roc_curve)
+cat("AUC:", auc_value, "\n")
+```
+
+    ## AUC: 0.5915
+
+``` r
+# Calculate performance measures
+perf <- performance(predictions, "tpr", "fpr")
+
+# Plot ROC curve
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-6.png)<!-- -->
+
+``` r
+# Plot ROC curve
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2, 
+     xlab = "False Positive Rate", ylab = "True Positive Rate", 
+     xlim = c(0, 1), ylim = c(0, 1))
+abline(a = 0, b = 1, lty = 2, col = "red")  # Diagonal line for reference
+
+# Add AUC value to the plot
+auc_value <- performance(predictions, "auc")@y.values[[1]]
+text(0.5, 0.5, paste("AUC =", round(auc_value, 2)), col = "#4daf4a", lwd=4)
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-7.png)<!-- -->
+
+``` r
+# Prediction 
+new_data <- mydata[1:10, ]
+predictions <- predict(logit_model, newdata = new_data, type = "response")
+print(predictions)
+```
+
+    ##         1         2         3         4         5         6         7         8 
+    ## 0.3027333 0.3027252 0.3048305 0.3440319 0.3614021 0.3951736 0.3323341 0.3905819 
+    ##         9        10 
+    ## 0.3125115 0.3226536
+
+``` r
+hist(predictions, breaks = 20, col = "lightblue", main = "Histogram of Predicted Probabilities")
+```
+
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-8.png)<!-- -->
+
+``` r
+# Model Acceptance
+predicted <- predict(logit_model, type = "response")
+predicted_binary <- ifelse(predicted > 0.5, 1, 0)
+confusion <- table(predicted_binary, mydata$Revenue_Binary)
+accuracy <- sum(diag(confusion)) / sum(confusion)
+precision <- confusion[2, 2] / sum(confusion[, 2])
+recall <- confusion[2, 2] / sum(confusion[2, ])
+f1_score <- 2 * precision * recall / (precision + recall)
+auc <- roc(mydata$Revenue_Binary, predicted)$auc
+```
+
+    ## Setting levels: control = 0, case = 1
+    ## Setting direction: controls < cases
+
+``` r
+# Model Accuracy
+cat("Accuracy:", accuracy, "\n")
+```
+
+    ## Accuracy: 0.6375
+
+``` r
+cat("Precision:", precision, "\n")
+```
+
+    ## Precision: 0.06666667
+
+``` r
+cat("Recall:", recall, "\n")
+```
+
+    ## Recall: 0.6666667
+
+``` r
+cat("F1-score:", f1_score, "\n")
+```
+
+    ## F1-score: 0.1212121
+
+``` r
+cat("AUC:", auc, "\n")
+```
+
+    ## AUC: 0.5915
+
+<p>
+This code reads a dataset from an Excel file, preprocesses it to create
+a binary outcome variable based on a threshold, fits a logistic
+regression model to predict this outcome using three predictor
+variables, conducts residual analysis, evaluates model performance using
+ROC curve and calculates AUC, makes predictions for a subset of the
+data, and assesses model accuracy metrics including accuracy, precision,
+recall, F1-score, and AUC.
+</p>
