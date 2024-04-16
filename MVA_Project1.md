@@ -703,7 +703,7 @@ table(kmeans_model$cluster)
 
     ## 
     ##  1  2 
-    ## 12  8
+    ##  8 12
 
 ``` r
 # Visualize cluster and membership using first two Principal Components
@@ -766,8 +766,8 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
 ```
 
     ##   cluster size ave.sil.width
-    ## 1       1    8          0.46
-    ## 2       2   12          0.80
+    ## 1       1   16          0.69
+    ## 2       2    4          1.00
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
@@ -1014,75 +1014,70 @@ library(dplyr)
 ``` r
 mydata <- read_excel("News Website Dataset_2.xlsx")
 data_num <- mydata[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
+```
 
-model <- lm(Conversion_Rate ~ Time_of_Day + Traffic_Source + 
-                    Landing_Page + Campaign + 
-                    Content_Category + Device_Category + 
-                    Avg_Session_Duration, data = mydata)
+#### Model Development
+
+``` r
+model <- lm(Total_revenue ~ Total_Sessions
++ Conversion_Rate + Avg_Session_Duration, data = mydata)
 model_fit <- summary(model)
 print(model_fit)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = Conversion_Rate ~ Time_of_Day + Traffic_Source + 
-    ##     Landing_Page + Campaign + Content_Category + Device_Category + 
+    ## lm(formula = Total_revenue ~ Total_Sessions + Conversion_Rate + 
     ##     Avg_Session_Duration, data = mydata)
     ## 
     ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.46689 -0.17101  0.00555  0.18987  0.40556 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -184.85  -81.61  -10.46   78.97  212.17 
     ## 
-    ## Coefficients: (12 not defined because of singularities)
-    ##                                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)                    0.537965   0.068696   7.831 7.92e-13 ***
-    ## Time_of_DayEvening             0.040988   0.052290   0.784    0.434    
-    ## Time_of_DayMorning            -0.039018   0.052269  -0.746    0.457    
-    ## Time_of_DayNight               0.031191   0.052393   0.595    0.553    
-    ## Traffic_SourceOrganic Search  -0.009775   0.058807  -0.166    0.868    
-    ## Traffic_SourceOrganic Social  -0.076678   0.058599  -1.309    0.193    
-    ## Traffic_SourcePaid Search      0.019777   0.059268   0.334    0.739    
-    ## Traffic_SourceReferral        -0.039162   0.058389  -0.671    0.503    
-    ## Landing_Page/article-page            NA         NA      NA       NA    
-    ## Landing_Page/blog/new-product        NA         NA      NA       NA    
-    ## Landing_Page/catgory-page            NA         NA      NA       NA    
-    ## Landing_PageMobile                   NA         NA      NA       NA    
-    ## CampaignPaid                         NA         NA      NA       NA    
-    ## CampaignSEO Campaign                 NA         NA      NA       NA    
-    ## CampaignSocial Media                 NA         NA      NA       NA    
-    ## Content_CategoryBlog                 NA         NA      NA       NA    
-    ## Content_CategoryHomepage             NA         NA      NA       NA    
-    ## Content_CategoryProduct              NA         NA      NA       NA    
-    ## Device_CategoryMobile                NA         NA      NA       NA    
-    ## Device_CategoryTablet                NA         NA      NA       NA    
-    ## Avg_Session_Duration          -0.002713   0.015963  -0.170    0.865    
+    ## Coefficients:
+    ##                       Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)          119.54318   33.79714   3.537 0.000533 ***
+    ## Total_Sessions         0.05439    0.06500   0.837 0.404024    
+    ## Conversion_Rate       92.69082   32.81633   2.825 0.005354 ** 
+    ## Avg_Session_Duration  -5.39689    6.35919  -0.849 0.397362    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.2335 on 151 degrees of freedom
-    ## Multiple R-squared:  0.03912,    Adjusted R-squared:  -0.01179 
-    ## F-statistic: 0.7684 on 8 and 151 DF,  p-value: 0.6311
+    ## Residual standard error: 96.03 on 156 degrees of freedom
+    ## Multiple R-squared:  0.05618,    Adjusted R-squared:  0.03803 
+    ## F-statistic: 3.095 on 3 and 156 DF,  p-value: 0.02866
 
-``` r
-plot(model)
-```
+<p>
+In this step, we loaded the dataset and fitted a multiple regression
+model using the lm() function. The model predicts the Total Revenue
+based on sTotal Sessions, Conversion Rate and Avg session duration
+</p>
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->
+#### Model Acceptance
 
 ``` r
 coefficients(model_fit)
 ```
 
-    ##                                  Estimate Std. Error    t value     Pr(>|t|)
-    ## (Intercept)                   0.537965201 0.06869645  7.8310480 7.921501e-13
-    ## Time_of_DayEvening            0.040988434 0.05228957  0.7838740 4.343419e-01
-    ## Time_of_DayMorning           -0.039017597 0.05226948 -0.7464699 4.565442e-01
-    ## Time_of_DayNight              0.031191238 0.05239325  0.5953293 5.525145e-01
-    ## Traffic_SourceOrganic Search -0.009774794 0.05880742 -0.1662170 8.682085e-01
-    ## Traffic_SourceOrganic Social -0.076678220 0.05859907 -1.3085228 1.926842e-01
-    ## Traffic_SourcePaid Search     0.019776721 0.05926824  0.3336816 7.390828e-01
-    ## Traffic_SourceReferral       -0.039161739 0.05838940 -0.6706994 5.034366e-01
-    ## Avg_Session_Duration         -0.002713297 0.01596264 -0.1699780 8.652549e-01
+    ##                          Estimate  Std. Error    t value     Pr(>|t|)
+    ## (Intercept)          119.54317823 33.79714046  3.5370797 0.0005330632
+    ## Total_Sessions         0.05438749  0.06500008  0.8367297 0.4040244587
+    ## Conversion_Rate       92.69081501 32.81633125  2.8245331 0.0053537621
+    ## Avg_Session_Duration  -5.39689133  6.35918737 -0.8486763 0.3973618488
+
+``` r
+confint(model_fit,level=0.95)
+```
+
+    ##      2.5 % 97.5 %
+
+``` r
+fitted(model_fit)
+```
+
+    ## NULL
+
+#### Residual Analysis
 
 ``` r
 library(GGally)
@@ -1124,78 +1119,80 @@ ggpairs(data=mydata, title="News Website Data")
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-14-5.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
-confint(model_fit,level=0.95)
+plot(model)
 ```
 
-    ##      2.5 % 97.5 %
-
-``` r
-fitted(model_fit)
-```
-
-    ## NULL
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-4.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-5.png)<!-- -->
 
 ``` r
 residuals(model_fit)
 ```
 
     ##            1            2            3            4            5            6 
-    ## -0.123111549 -0.360096786 -0.046027030 -0.246940173  0.090742721  0.279170568 
+    ##   96.9063072  -63.3452085  -21.5983314   10.5036248   86.1327874   -5.7575205 
     ##            7            8            9           10           11           12 
-    ## -0.084165414 -0.079500866 -0.373352326 -0.030002640  0.065996420  0.009022928 
+    ##  -70.0707498  145.3104876  106.9838636   45.0963398   14.5727938   29.8310979 
     ##           13           14           15           16           17           18 
-    ##  0.255899954 -0.431288001 -0.127944432  0.023653774  0.093244837  0.371814707 
+    ##  -14.4660514 -102.7935785    2.4551071  -15.6960588 -123.0888193  -66.5997753 
     ##           19           20           21           22           23           24 
-    ##  0.027734704  0.091621759 -0.209843374  0.360816270  0.119593866 -0.239902084 
+    ## -159.4312118  130.7408517 -110.2393455  -51.9239117   -0.3323999   78.8408473 
     ##           25           26           27           28           29           30 
-    ## -0.232559140  0.081424396 -0.004229678  0.117924690 -0.053054172  0.151867910 
+    ##  -87.0582883    7.3599269   18.9900952  149.2526579  141.2738785  123.7961466 
     ##           31           32           33           34           35           36 
-    ## -0.310992608  0.063824503 -0.377451127  0.270602312 -0.355422527 -0.329935855 
+    ##   50.1271139   99.1466470  141.4334344  -18.0822273   50.5839276    7.0728911 
     ##           37           38           39           40           41           42 
-    ## -0.061813639  0.249580217 -0.358341559  0.365273927  0.030534362  0.236312512 
+    ##   79.3701884 -113.0420897  -26.2602478  107.0903384  -45.1905240 -107.8048420 
     ##           43           44           45           46           47           48 
-    ##  0.346700813  0.144262893 -0.136887797  0.060319312 -0.441863854  0.244915562 
+    ##  -75.4089353  141.9198405  157.3065896  -49.2985774  -52.1220267   50.8102797 
     ##           49           50           51           52           53           54 
-    ##  0.147777897  0.326369306  0.141827334 -0.023418115  0.041554918  0.305013827 
+    ## -109.3173672  -75.3781492  -23.8833817  -91.3632496   12.7576593 -184.8522599 
     ##           55           56           57           58           59           60 
-    ## -0.023335016 -0.370417408  0.093208352  0.039649306  0.045803711  0.267400274 
+    ##  -80.1635624  165.3611312   -2.6866932 -117.5246959  -45.6684424   -4.3019543 
     ##           61           62           63           64           65           66 
-    ##  0.060489292  0.122278448 -0.278054848  0.399083448 -0.144719595  0.189101089 
+    ## -115.7181760  -16.0395742   -9.0705558   -2.9343184   19.7157158 -118.0151976 
     ##           67           68           69           70           71           72 
-    ## -0.175368439 -0.326034289  0.315382296 -0.219911381  0.322271240  0.192161019 
+    ## -139.3479658  -97.7078351   32.2761908  181.9362249   62.6935134  -20.2748190 
     ##           73           74           75           76           77           78 
-    ## -0.286943859  0.240446052  0.324639201 -0.223598971  0.046085663 -0.008242092 
+    ## -117.3101609 -164.6807474  143.3974823 -114.9808970   49.9085057  -57.0011345 
     ##           79           80           81           82           83           84 
-    ## -0.292260879 -0.333806322 -0.156603080 -0.101445318 -0.165814034  0.120829214 
+    ## -116.6948692   73.4158922  -61.0243793 -127.9659815   11.9916089  157.3621178 
     ##           85           86           87           88           89           90 
-    ##  0.385213151  0.039170934 -0.343622378 -0.159370260  0.229683603 -0.011793418 
+    ##  144.3488696   50.2371210   86.5083269  -19.5028011 -141.2681667 -111.0866966 
     ##           91           92           93           94           95           96 
-    ##  0.264922063 -0.321647007 -0.133505316 -0.367563941  0.144935805  0.024284176 
+    ##  103.5163212  165.5064321   75.5167803  -77.5501907  -30.1503203  147.6307296 
     ##           97           98           99          100          101          102 
-    ## -0.011638078  0.315526566  0.331373291 -0.281370264 -0.075692822  0.277153216 
+    ##  114.1303249  -38.3763032  -48.5221613  -44.3464178  -94.6115941   37.2095682 
     ##          103          104          105          106          107          108 
-    ## -0.146933440  0.159272741 -0.286633491 -0.083138765  0.234027741 -0.033674470 
+    ## -113.0381888   67.6150879 -115.1379618  -85.9407806 -151.1830975  -95.6802143 
     ##          109          110          111          112          113          114 
-    ## -0.021826323  0.405560900  0.012343414  0.008203661  0.033391106  0.179917522 
+    ##   39.5906614  125.4828213  -14.8145645  114.4673218  167.6948464  135.7407511 
     ##          115          116          117          118          119          120 
-    ##  0.042710685 -0.170625779  0.309936765  0.220707934  0.170953304  0.138579779 
+    ## -123.0112138  -16.1909357   69.4532910   32.6080973 -100.2953600   54.7270022 
     ##          121          122          123          124          125          126 
-    ##  0.186763487  0.349762438 -0.108857930 -0.347999516 -0.287034066 -0.078285826 
+    ##  -90.6087276  104.8198065  152.3854425  -95.0608137  -23.6371842  -62.0294269 
     ##          127          128          129          130          131          132 
-    ##  0.277991822  0.252252540 -0.124300251 -0.149213432  0.132150795  0.002901012 
+    ##  -74.0525364 -124.7143456   -1.6420125 -156.8580098  123.4698586  102.6680959 
     ##          133          134          135          136          137          138 
-    ## -0.219110133 -0.292321108  0.277233878 -0.237114062 -0.255744886 -0.080619173 
+    ##  124.5092327  -11.8530874  -56.3698736   69.4740498  -38.6534685  110.5109199 
     ##          139          140          141          142          143          144 
-    ##  0.249248258  0.319564669  0.340417849  0.001617525 -0.043619849  0.273816829 
+    ##   11.0234754   80.4643643  139.4212543    8.7829812  -46.0762062  140.4859423 
     ##          145          146          147          148          149          150 
-    ## -0.266885154  0.041197439 -0.237471298 -0.037324863 -0.154469625 -0.172164040 
+    ## -120.5971262  -34.2782902 -104.2335622   16.7411277   49.0735323 -109.1190913 
     ##          151          152          153          154          155          156 
-    ##  0.321977135  0.210863633 -0.368543808 -0.160486732 -0.064836686 -0.248654980 
+    ## -134.5198168 -124.4338788 -111.2549407   98.8913694   11.3851605  152.3546055 
     ##          157          158          159          160 
-    ## -0.466887456  0.290115205 -0.147095211 -0.207194563
+    ##  212.1671614  -13.0161173  -37.4890318  -39.6152355
+
+<p>
+The residual vs. fitted plot is a tool used to evaluate the assumptions
+and adequacy of a regression model. It helps to identify whether the
+model adequately captures the underlying relationships in the data or if
+there are issues that need to be addressed. The plot shows a pattern of
+points around zero, the model is not appropriate.
+</p>
 
 #### Prediction
 
@@ -1220,8 +1217,8 @@ predicted_total_revenue <- predict(model, newdata = new_data)
 predicted_total_revenue
 ```
 
-    ##         1 
-    ## 0.4776956
+    ##       1 
+    ## 146.832
 
 ##### Model Accuracy
 
@@ -1237,14 +1234,14 @@ rsquared <- summary(model)$r.squared
 cat("R-squared:", rsquared, "\n")
 ```
 
-    ## R-squared: 0.03911893
+    ## R-squared: 0.05617748
 
 ``` r
 adjusted_rsquared <- summary(model)$adj.r.squared
 cat("Adjusted R-squared:", adjusted_rsquared, "\n")
 ```
 
-    ## Adjusted R-squared: -0.01178868
+    ## Adjusted R-squared: 0.03802704
 
 ``` r
 predictions <- predict(model)
@@ -1252,7 +1249,7 @@ rmse <- sqrt(mean((data$Total_revenue - predictions)^2))
 cat("RMSE:", rmse, "\n")
 ```
 
-    ## RMSE: 193.7647
+    ## RMSE: 94.81974
 
 ### Assignment 8
 
@@ -1351,7 +1348,7 @@ anova(logit_model)
 plot(logit_model)
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-4.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-4.png)<!-- -->
 
 ``` r
 predicted_prob <- predict(logit_model, type = "response")
@@ -1372,7 +1369,7 @@ plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-5.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-5.png)<!-- -->
 
 ``` r
 # Calculate AUC
@@ -1391,7 +1388,7 @@ plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-6.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-6.png)<!-- -->
 
 ``` r
 # Plot ROC curve
@@ -1405,7 +1402,7 @@ auc_value <- performance(predictions, "auc")@y.values[[1]]
 text(0.5, 0.5, paste("AUC =", round(auc_value, 2)), col = "#4daf4a", lwd=4)
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-7.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-7.png)<!-- -->
 
 ``` r
 # Prediction 
@@ -1423,7 +1420,7 @@ print(predictions)
 hist(predictions, breaks = 20, col = "lightblue", main = "Histogram of Predicted Probabilities")
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-17-8.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-8.png)<!-- -->
 
 ``` r
 # Model Acceptance

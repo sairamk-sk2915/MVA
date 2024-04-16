@@ -467,21 +467,31 @@ library(dplyr)
 
 mydata <- read_excel("News Website Dataset_2.xlsx")
 data_num <- mydata[, c("Avg_Session_Duration", "Total_Sessions", "Total_revenue","Conversion_Rate")]
-
-model <- lm(Conversion_Rate ~ Time_of_Day + Traffic_Source + 
-                    Landing_Page + Campaign + 
-                    Content_Category + Device_Category + 
-                    Avg_Session_Duration, data = mydata)
+```
+#### Model Development
+```{r}
+model <- lm(Total_revenue ~ Total_Sessions
++ Conversion_Rate + Avg_Session_Duration, data = mydata)
 model_fit <- summary(model)
 print(model_fit)
-plot(model)
+```
+<p>In this step, we loaded the dataset and fitted a multiple regression model using the lm() function. The model predicts the Total Revenue based on sTotal Sessions, Conversion Rate and Avg session duration</p>
+
+#### Model Acceptance
+```{r}
 coefficients(model_fit)
-library(GGally)
-ggpairs(data=mydata, title="News Website Data")
 confint(model_fit,level=0.95)
 fitted(model_fit)
+```
+#### Residual Analysis
+```{r}
+library(GGally)
+ggpairs(data=mydata, title="News Website Data")
+plot(model)
 residuals(model_fit)
 ```
+
+<p>The residual vs. fitted plot is a tool used to evaluate the assumptions and adequacy of a regression model. It helps to identify whether the model adequately captures the underlying relationships in the data or if there are issues that need to be addressed. The plot shows a pattern of points around zero, the model is not appropriate.</p>
 
 #### Prediction
 <p>The predict() function will generate predicted values of the dependent variable (Total_revenue) based on the provided predictors.</p>
