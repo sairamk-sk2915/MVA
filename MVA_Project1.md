@@ -871,7 +871,7 @@ fa.parallel(data_num[-1])
 
 ![](MVA_Project1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-    ## Parallel analysis suggests that the number of factors =  1  and the number of components =  1
+    ## Parallel analysis suggests that the number of factors =  2  and the number of components =  1
 
 ``` r
 print(factor_model)
@@ -1270,6 +1270,8 @@ To perform logistic regression analysis, we will use the glm() function.
   and scale-location plot, to check for homoscedasticity and normality
   of residuals.
 
+#### Model Development
+
 ``` r
 library(readxl)
 library(dplyr)
@@ -1293,6 +1295,9 @@ library(pROC)
 
 ``` r
 mydata <- read_excel("News Website Dataset_2.xlsx")
+```
+
+``` r
 threshold <- 200
 
 mydata$Revenue_Binary <- ifelse(mydata$Total_revenue > threshold, 1, 0)
@@ -1301,6 +1306,25 @@ logit_model <- glm(Revenue_Binary ~  Total_Sessions
 + Conversion_Rate + Avg_Session_Duration, 
                     data = mydata, 
                     family = binomial)
+```
+
+<p>
+The code reads a dataset and preprocesses it to create a binary outcome
+variable based on a threshold.
+</p>
+<p>
+It fits a logistic regression model using three predictor variables:
+<p>
+Total_Sessions, Conversion_Rate, and Avg_Session_Duration.
+</p>
+This model development process involves specifying the model formula,
+fitting the model to the data, and obtaining a summary of the model’s
+coefficients and statistical significance.
+</p>
+
+#### Model Acceptance
+
+``` r
 summary(logit_model)
 ```
 
@@ -1343,12 +1367,92 @@ anova(logit_model)
     ## Conversion_Rate       1  2.64650       157     209.04
     ## Avg_Session_Duration  1  0.64962       156     208.39
 
+<p>
+The coefficients represent the estimated effect of each predictor
+variable on the log-odds of the outcome variable being in the positive
+class (1).
+</p>
+<p>
+For example, the coefficient for Total_Sessions is approximately
+0.0002231, indicating that for each unit increase in Total_Sessions, the
+log-odds of the outcome variable being in the positive class increases
+by 0.0002231 units.
+</p>
+<p>
+The coefficients for Conversion_Rate and Avg_Session_Duration are
+1.1609186 and -0.1110208, respectively.
+</p>
+
+#### Residual Analysis
+
 ``` r
 # Residual Analysis
+residuals(logit_model)
+```
+
+    ##          1          2          3          4          5          6          7 
+    ##  1.5458998 -0.8492063 -0.8527597 -0.9183062  1.4267194 -1.0028099 -0.8988519 
+    ##          8          9         10         11         12         13         14 
+    ##  1.3712167  1.5251976 -0.8826919 -0.9987494  1.3762101 -1.1249902 -0.8396524 
+    ##         15         16         17         18         19         20         21 
+    ## -0.9966884 -1.0265133 -0.9379967 -1.1498749 -0.9308056  1.4658304 -0.9389572 
+    ##         22         23         24         25         26         27         28 
+    ## -1.1347494 -1.0671331  1.5979272 -0.8158540 -0.9708095  1.2835367  1.3131500 
+    ##         29         30         31         32         33         34         35 
+    ##  1.4436258  1.3351454 -0.7955089  1.3241214  1.5698692 -1.0765072 -0.7954189 
+    ##         36         37         38         39         40         41         42 
+    ## -0.8257474  1.4868422 -1.0398369 -0.9040623  1.1404993 -0.9407847 -1.1572207 
+    ##         43         44         45         46         47         48         49 
+    ## -1.1220745  1.4160402  1.4482367 -0.9592012 -0.8122101  1.3855960 -1.1339354 
+    ##         50         51         52         53         54         55         56 
+    ## -1.0550974 -1.1002643 -0.9238604 -1.0369594 -1.2293515 -0.9829706  1.4922321 
+    ##         57         58         59         60         61         62         63 
+    ## -0.9782253 -0.9777151 -0.9353946 -1.0126308 -0.8998333 -1.0979265 -0.8258289 
+    ##         64         65         66         67         68         69         70 
+    ##  1.1527493 -0.7930225 -1.1401239 -0.8863203 -0.7385364  1.1481455  1.5648910 
+    ##         71         72         73         74         75         76         77 
+    ##  1.1978600 -1.0386886 -0.8425608 -1.1475154  1.2896632 -0.8182684  1.4109192 
+    ##         78         79         80         81         82         83         84 
+    ## -0.9859410 -0.8767846  1.6628349 -0.8853418 -0.8905493 -0.8414351  1.3822860 
+    ##         85         86         87         88         89         90         91 
+    ##  1.2570199  1.3870896  1.6302954 -0.8645277 -1.0013917 -0.9630485  1.1610194 
+    ##         92         93         94         95         96         97         98 
+    ##  1.6200959  1.3942511 -0.8857336 -1.0918482  1.4470138  1.4292224 -1.2003564 
+    ##         99        100        101        102        103        104        105 
+    ## -1.1296417 -0.8138223 -0.8545251  1.2331770 -0.9582108  1.2676993 -0.7789846 
+    ##        106        107        108        109        110        111        112 
+    ## -0.8522443 -1.0443710 -0.8786750  1.2992106  1.2883899 -1.0243540  1.4269058 
+    ##        113        114        115        116        117        118        119 
+    ##  1.4606106  1.3878572 -0.9575861 -0.9398370  1.3014146  1.2234606 -1.0087927 
+    ##        120        121        122        123        124        125        126 
+    ##  1.3239776 -0.9846323  1.1997294  1.4330638 -0.7911034 -0.8502464 -0.8576156 
+    ##        127        128        129        130        131        132        133 
+    ## -1.1601529 -1.1533620 -0.8636970 -0.9352462  1.3022532  1.3410409  1.4971404 
+    ##        134        135        136        137        138        139        140 
+    ## -0.9486561 -1.0589601  1.4640681 -0.8272578  1.4228100  1.2342499  1.3037887 
+    ##        141        142        143        144        145        146        147 
+    ##  1.2185530 -0.9381057 -0.8623546  1.2272132 -0.8066662 -1.0242440 -0.9207381 
+    ##        148        149        150        151        152        153        154 
+    ## -0.8995723  1.4421148 -0.8937857 -1.1065462 -1.0516325 -0.8334256  1.4115464 
+    ##        155        156        157        158        159        160 
+    ## -0.8917771  1.4272029  1.6942057 -1.1407678 -0.8545774 -0.8905206
+
+``` r
 plot(logit_model)
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-4.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-23-3.png)<!-- -->![](MVA_Project1_files/figure-gfm/unnamed-chunk-23-4.png)<!-- -->
+<p>
+Function calculates the residuals for the fitted logistic regression
+model (logit_model). It returns a vector containing the residuals.
+</p>
+<p>
+Plot() function generates diagnostic plots for the logistic regression
+model (logit_model).diagnostic plots including residuals vs. fitted
+values, quantile-quantile (Q-Q) plot, and leverage plot
+</p>
+
+#### Prediction
 
 ``` r
 predicted_prob <- predict(logit_model, type = "response")
@@ -1369,7 +1473,7 @@ plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-5.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ``` r
 # Calculate AUC
@@ -1388,7 +1492,7 @@ plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-6.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
 
 ``` r
 # Plot ROC curve
@@ -1402,7 +1506,7 @@ auc_value <- performance(predictions, "auc")@y.values[[1]]
 text(0.5, 0.5, paste("AUC =", round(auc_value, 2)), col = "#4daf4a", lwd=4)
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-7.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->
 
 ``` r
 # Prediction 
@@ -1420,60 +1524,25 @@ print(predictions)
 hist(predictions, breaks = 20, col = "lightblue", main = "Histogram of Predicted Probabilities")
 ```
 
-![](MVA_Project1_files/figure-gfm/unnamed-chunk-20-8.png)<!-- -->
+![](MVA_Project1_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
+
+#### Model Accuracy
 
 ``` r
-# Model Acceptance
 predicted <- predict(logit_model, type = "response")
 predicted_binary <- ifelse(predicted > 0.5, 1, 0)
 confusion <- table(predicted_binary, mydata$Revenue_Binary)
 accuracy <- sum(diag(confusion)) / sum(confusion)
-precision <- confusion[2, 2] / sum(confusion[, 2])
-recall <- confusion[2, 2] / sum(confusion[2, ])
-f1_score <- 2 * precision * recall / (precision + recall)
-auc <- roc(mydata$Revenue_Binary, predicted)$auc
+print(accuracy)
 ```
 
-    ## Setting levels: control = 0, case = 1
-    ## Setting direction: controls < cases
-
-``` r
-# Model Accuracy
-cat("Accuracy:", accuracy, "\n")
-```
-
-    ## Accuracy: 0.6375
-
-``` r
-cat("Precision:", precision, "\n")
-```
-
-    ## Precision: 0.06666667
-
-``` r
-cat("Recall:", recall, "\n")
-```
-
-    ## Recall: 0.6666667
-
-``` r
-cat("F1-score:", f1_score, "\n")
-```
-
-    ## F1-score: 0.1212121
-
-``` r
-cat("AUC:", auc, "\n")
-```
-
-    ## AUC: 0.5915
+    ## [1] 0.6375
 
 <p>
-This code reads a dataset from an Excel file, preprocesses it to create
-a binary outcome variable based on a threshold, fits a logistic
-regression model to predict this outcome using three predictor
-variables, conducts residual analysis, evaluates model performance using
-ROC curve and calculates AUC, makes predictions for a subset of the
-data, and assesses model accuracy metrics including accuracy, precision,
-recall, F1-score, and AUC.
+The code reads a dataset from an Excel file, preprocesses it to create a
+binary outcome variable based on a threshold, fits a logistic regression
+model to predict this outcome using three predictor variables, conducts
+residual analysis, evaluates model performance using ROC curve and
+calculates AUC, makes predictions for a subset of the data, and assesses
+model accuracy metrics including accuracy and precision.
 </p>
