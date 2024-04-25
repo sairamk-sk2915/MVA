@@ -633,3 +633,65 @@ print(accuracy)
 ```
 <p>The code reads a dataset from an Excel file, preprocesses it to create a binary outcome variable based on a threshold, fits a logistic regression model to predict this outcome using three predictor variables, conducts residual analysis, evaluates model performance using ROC curve and calculates AUC, makes predictions for a subset of the data, and assesses model accuracy metrics including accuracy and precision.</p>
 
+### Discriminant Analysis
+
+```{r}
+library(MASS)
+library(readxl)
+library(ROCR)
+
+mydata <- read_excel("News Website Dataset_2.xlsx")
+mydata$Binary_Content_Category <- ifelse(mydata$Content_Category == "Homepage", 1, 0)
+
+```
+
+#### Model Development
+<p>This code trains a model using Linear Discriminant Analysis (LDA) to predict the variable called Binary_Content_Category. It uses several predictor variables such as Total_Sessions, Conversion_Rate, Avg_Session_Duration, Total_revenue, Content_Category_Num, and Device_Category_Num to make these predictions.</p>
+
+```{r}
+lda_model <- lda(Binary_Content_Category ~ Total_Sessions + Conversion_Rate + Avg_Session_Duration + Total_revenue + Content_Category_Num + Device_Category_Num , data = mydata)
+
+```
+
+#### Model Acceptance
+
+<p>The code reviews and accepts the trained Linear Discriminant Analysis (LDA) model, labeled as lda_model. Using the summary function, it generates an in-depth summary of the model's parameters, capturing details like the prior probabilities for each category, the average values for each group, and the coefficients used in the classification process. This summary aids in comprehending the model's properties and effectiveness. Additionally, the print function offers a more detailed look into the model, presenting additional information such as group means, coefficients, and classification rules, which enriches our understanding of how the model operates. By leveraging these functions, we can thoroughly evaluate and approve the LDA model, ensuring clarity and reliability in its application.</p>
+
+```{r}
+summary(lda_model)
+print(lda_model)
+```
+
+<p>The output provides detailed information about different aspects of the Linear Discriminant Analysis (LDA) model. It includes essential details like the probabilities assigned to each category, the counts of observations in each category, the average values of predictor variables for each category, and the scaling applied to linear discriminants. Additionally, it lists the categories being analyzed, numerical values representing the decomposition of predictors, and other relevant information such as the total number of observations and the specific function and formula used to create the model. Overall, these components help in understanding how the model is structured and how it processes the data to make predictions.</p>
+
+<p>The output summarizes the results of a Linear Discriminant Analysis (LDA) model. It shows how the model predicts a specific outcome (Binary_Content_Category) using various input factors such as Total_Sessions, Conversion_Rate, Avg_Session_Duration, Total_revenue, Content_Category_Num, and Device_Category_Num. The summary also includes the likelihood of each outcome group (0 and 1) occurring, indicating how common each group is in the data. Additionally, it provides the average values of the input factors for each outcome group, which can highlight potential differences between the groups. Moreover, the coefficients of the linear discriminants (LD1) indicate how strongly each input factor influences the model's prediction. Overall, this information helps to understand how the model works and which factors play a significant role in its decision-making process.</p>
+
+#### Residual Analysis
+```{r}
+plot(lda_model)
+```
+
+#### Prediction
+```{r}
+lda_predictions <- predict(lda_model, newdata = mydata)
+lda_predictions
+
+predicted_classes <- lda_predictions$class
+predicted_classes
+lda_predictions$x
+
+predicted_probabilities <- as.data.frame(lda_predictions$posterior)
+predicted_probabilities
+pred <- prediction(predicted_probabilities[,2], mydata$Binary_Content_Category)
+```
+
+#### Model Accuracy
+```{r}
+roc.perf = performance(pred, measure = "tpr", x.measure = "fpr")
+auc.train <- performance(pred, measure = "auc")
+auc.train <- auc.train@y.values
+plot(roc.perf, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
+
+```
