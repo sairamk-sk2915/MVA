@@ -2,7 +2,7 @@
 title: "News Website Traffic and Revenue Analysing Dataset"
 author: "Satya Shiva Sai Ram Kamma"
 date: "2024-02-11"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
